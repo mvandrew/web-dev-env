@@ -1,0 +1,48 @@
+version: '2'
+
+services:
+  db:
+    build: ./images/mysql
+    container_name: ${PROJECT}db
+    networks:
+      - laravel
+    restart: always
+    ports:
+      - 3306:3306
+    volumes_from:
+      - files
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: laravelpwd
+      MYSQL_ROOT_PASSWORD: rootpwd
+
+  adminer:
+    image: adminer
+    container_name: ${PROJECT}adminer
+    networks:
+      - laravel
+    links:
+      - db:db
+    restart: always
+    ports:
+      - 8080:8080
+    environment:
+      UPLOAD: 1024M
+
+  files:
+    image: alpine:latest
+    container_name: ${PROJECT}files
+    volumes:
+      - ./local/logs/mysql:/var/log/mysql
+      - ./local/db:/var/lib/mysql
+    networks:
+      - laravel
+
+networks:
+  laravel:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.151.0.0/24
