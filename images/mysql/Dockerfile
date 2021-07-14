@@ -15,7 +15,7 @@ RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
     && echo ${TIMEZONE} > /etc/timezone \
     && dpkg-reconfigure -f noninteractive tzdata
 
-ADD laravel.cnf /etc/mysql/conf.d/zz-laravel.cnf
+ADD ./dev.cnf /etc/mysql/conf.d/zzz-dev.cnf
 #ADD mysqltuner.pl /root/mysqltuner.pl
 
 RUN wget http://mysqltuner.pl/ -O /root/mysqltuner.pl --no-check-certificate
